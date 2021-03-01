@@ -89,9 +89,25 @@ namespace idedev2021
             for (var i = 0; i < text.Length; i++)
             {
                 var ch = text[i];
-                if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+                if (ch == '(')
                 {
-                    if (operationsStack.Count == 0)
+                    operationsStack.Push('(');
+                }
+                else if (ch == ')')
+                {
+                    while (operationsStack.Peek() != '(')
+                    {
+                        var headOp = operationsStack.Pop();
+                        var secondOperand = operandsStack.Pop();
+                        var firstOperand = operandsStack.Pop();
+                        var res = new BinaryExpression(firstOperand, secondOperand, headOp);
+                        operandsStack.Push(res);
+                    }
+                    operationsStack.Pop();
+                }
+                else if (ch == '+' || ch == '-' || ch == '*' || ch == '/')
+                {
+                    if (operationsStack.Count == 0 || operationsStack.Peek() == '(')
                     {
                         operationsStack.Push(ch);
                         continue;
@@ -134,10 +150,6 @@ namespace idedev2021
                 var firstOperand = operandsStack.Pop();
                 var res = new BinaryExpression(firstOperand, secondOperand, headOp);
                 operandsStack.Push(res);
-                if (operationsStack.Count == 0)
-                {
-                    break;
-                }
             }
             
             return operandsStack.Pop();
