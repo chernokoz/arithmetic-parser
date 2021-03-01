@@ -50,6 +50,7 @@ namespace idedev2021
                     var headOp = operationsStack.Peek();
                     var headPriority = LangConfig.Priorities[headOp];
                     
+                    // if operations
                     while (operationsStack.Count > 0 && priority <= headPriority)
                     {
                         headOp = operationsStack.Pop();
@@ -62,6 +63,7 @@ namespace idedev2021
                             break;
                         }
                         headOp = operationsStack.Peek();
+                        if (headOp == '(') break;
                         headPriority = LangConfig.Priorities[headOp];
                     }
                     

@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 
 namespace idedev2021
 {
@@ -10,6 +11,26 @@ namespace idedev2021
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1+2").Accept(dumpVisitor);
             Assert.AreEqual("Binary(Literal(1)+Literal(2))", dumpVisitor.ToString());
+            
+            Assert.Pass();
+        }
+        
+        [Test]
+        public void TestMinus()
+        {
+            var dumpVisitor = new DumpVisitor();
+            SimpleParser.Parse("9-3").Accept(dumpVisitor);
+            Assert.AreEqual("Binary(Literal(9)-Literal(3))", dumpVisitor.ToString());
+            
+            Assert.Pass();
+        }
+        
+        [Test]
+        public void TestMinusDivide()
+        {
+            var dumpVisitor = new DumpVisitor();
+            SimpleParser.Parse("5-5/5").Accept(dumpVisitor);
+            Assert.AreEqual("Binary(Literal(5)-Binary(Literal(5)/Literal(5)))", dumpVisitor.ToString());
             
             Assert.Pass();
         }
@@ -71,6 +92,43 @@ namespace idedev2021
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1+(3+(5+7))").Accept(dumpVisitor);
             Assert.AreEqual("Binary(Literal(1)+Paren(Binary(Literal(3)+Paren(Binary(Literal(5)+Literal(7))))))", dumpVisitor.ToString());
+            Assert.Pass();
+        }
+        
+        [Test]
+        public void TestNestedBracketsBeforeLiteral()
+        {
+            var dumpVisitor = new DumpVisitor();
+            SimpleParser.Parse("(1+(2+3))*2").Accept(dumpVisitor);
+            Assert.AreEqual(
+                "Binary(Paren(Binary(Literal(1)+Paren(Binary(Literal(2)+Literal(3)))))*Literal(2))",
+                dumpVisitor.ToString());
+            Assert.Pass();
+        }
+        
+        [Test]
+        public void TestNestedBracketsAfterLiteral()
+        {
+            var dumpVisitor = new DumpVisitor();
+            SimpleParser.Parse("2*(1/2+(2+3))").Accept(dumpVisitor);
+            Assert.AreEqual(
+                "Binary(Literal(2)" +
+                "*Paren(Binary(Binary(Literal(1)/Literal(2))+Paren(Binary(Literal(2)+Literal(3))))))",
+                
+                dumpVisitor.ToString());
+            Assert.Pass();
+        }
+        
+        [Test]
+        public void TestHardCombination()
+        {
+            var dumpVisitor = new DumpVisitor();
+            SimpleParser.Parse("1+((2+3)/4+7)*5").Accept(dumpVisitor);
+            Console.Write(dumpVisitor.ToString());
+            Assert.AreEqual(
+                "Binary(Literal(1)+" +
+                "Binary(Paren(Binary(Binary(Paren(Binary(Literal(2)+Literal(3)))/Literal(4))+Literal(7)))*Literal(5)))",
+                dumpVisitor.ToString());
             Assert.Pass();
         }
     }
