@@ -40,7 +40,6 @@ namespace idedev2021
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1*2+3*4*5").Accept(dumpVisitor);
             Assert.AreEqual("Binary(Binary(Literal(1)*Literal(2))+Binary(Binary(Literal(3)*Literal(4))*Literal(5)))", dumpVisitor.ToString());
-            
             Assert.Pass();
         }
         
@@ -53,7 +52,7 @@ namespace idedev2021
         {
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1+(2+3)").Accept(dumpVisitor);
-            Assert.AreEqual("Binary(Literal(1)+Binary(Literal(2)+Literal(3)))", dumpVisitor.ToString());
+            Assert.AreEqual("Binary(Literal(1)+Paren(Binary(Literal(2)+Literal(3))))", dumpVisitor.ToString());
             Assert.Pass();
         }
         
@@ -62,7 +61,7 @@ namespace idedev2021
         {
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1*(2+3)").Accept(dumpVisitor);
-            Assert.AreEqual("Binary(Literal(1)*Binary(Literal(2)+Literal(3)))", dumpVisitor.ToString());
+            Assert.AreEqual("Binary(Literal(1)*Paren(Binary(Literal(2)+Literal(3))))", dumpVisitor.ToString());
             Assert.Pass();
         }
         
@@ -71,7 +70,7 @@ namespace idedev2021
         {
             var dumpVisitor = new DumpVisitor();
             SimpleParser.Parse("1+(3+(5+7))").Accept(dumpVisitor);
-            Assert.AreEqual("Binary(Literal(1)+Binary(Literal(3)+Binary(Literal(5)+Literal(7))))", dumpVisitor.ToString());
+            Assert.AreEqual("Binary(Literal(1)+Paren(Binary(Literal(3)+Paren(Binary(Literal(5)+Literal(7))))))", dumpVisitor.ToString());
             Assert.Pass();
         }
     }
