@@ -133,4 +133,71 @@ namespace idedev2021
         }
     }
 
+    public class IncorrectSyntax
+    {
+        [Test]
+        public void TestTwoOperandsWithoutOperations()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("12")
+            );
+        }
+        
+        [Test]
+        public void TestOperationsWithoutNeededOperands()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1+")
+            );
+        }
+        
+        [Test]
+        public void NonOpenedBrackets()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1+2*3)")
+            );
+        }
+        
+        [Test]
+        public void TestTwoOperands()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1+*12")
+            );
+        }
+        
+        [Test]
+        public void TestBracketsAfterLiteral()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1(1+5)")
+            );
+        }
+        
+        [Test]
+        public void TestEmptyBrackets()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1*(1+5/())")
+            );
+        }
+        
+        [Test]
+        public void TestUnclosedBrackets()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("1+2/(3-4")
+            );
+        }
+        
+        [Test]
+        public void TestUnopenedBracket()
+        {
+            Assert.Throws<IncorrectSyntaxException>(
+                () => SimpleParser.Parse("(((a))))+5")
+            );
+        }
+    }
+
 }
